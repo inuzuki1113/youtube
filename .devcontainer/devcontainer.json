@@ -1,15 +1,11 @@
 {
-  "name": "DevKitPro 3DS Build Environment",
-  "image": "ubuntu:22.04",
-  "postCreateCommand": [
-    "wget https://apt.devkitpro.org/devkitpro-pacman.deb",
-    "sudo dpkg -i devkitpro-pacman.deb",
-    "sudo apt-get update",
-    "sudo apt-get install -y build-essential",
-    "sudo dkp-pacman -Syu",
-    "sudo dkp-pacman -S ctrulib3ds"
-  ],
+  "name": "3DS DevKitPro User Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
-  }
+  },
+  "workspaceFolder": "/workspace/youtube",
+  "postCreateCommand": "echo 'Container ready. Set DEVKITPRO and DEVKITARM manually if needed.'"
 }
