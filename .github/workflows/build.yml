@@ -16,9 +16,9 @@ jobs:
 
       - name: Install devkitPro
         run: |
-          wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb
-          sudo dpkg -i devkitpro-pacman.deb
-          dkp-pacman -S switch-dev
+          wget https://apt.devkitpro.org/install-devkitpro-pacman
+          chmod +x ./install-devkitpro-pacman
+          sudo ./install-devkitpro-pacman
           echo "export DEVKITPRO=/opt/devkitPro" >> $GITHUB_ENV
           echo "export DEVKITARM=${DEVKITPRO}/devkitARM" >> $GITHUB_ENV
           echo "export DEVKITPPC=${DEVKITPRO}/devkitPPC" >> $GITHUB_ENV
