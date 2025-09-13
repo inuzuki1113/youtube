@@ -1,5 +1,6 @@
 name: Build Nico3DSStream
 
+# Pushや手動実行でビルド
 on:
   push:
     branches:
@@ -11,27 +12,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      # リポジトリをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      # 必要なパッケージをインストール
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y git wget unzip build-essential
+          sudo apt install -y git wget unzip build-essential devkitpro-devkitarm
 
-      - name: Install devkitPro
+      # devkitPro 環境変数を設定
+      - name: Set devkitPro Environment
         run: |
-          wget https://downloads.devkitpro.org/devkitARM/devkitARM-2.6.5-linux.tar.bz2
-          sudo tar xvjf devkitARM-2.6.5-linux.tar.bz2 -C /opt/
           echo "export DEVKITPRO=/opt/devkitPro" >> $GITHUB_ENV
           echo "export DEVKITARM=/opt/devkitPro/devkitARM" >> $GITHUB_ENV
           echo "export PATH=$PATH:/opt/devkitPro/devkitARM/bin" >> $GITHUB_ENV
 
+      # 必要なライブラリをクローン（ctru, sf2d, citro3d）
       - name: Clone Libraries
         run: |
           git clone https://github.com/devkitPro/ctru.git /tmp/ctru
           git clone https://github.com/devkitPro/sf2dlib.git /tmp/sf2dlib
           git clone https://github.com/devkitPro/citro3d.git /tmp/citro3d
 
+      # ビルド
       - name: Build .3dsx
         run: |
           cd source
@@ -39,6 +44,7 @@ jobs:
           mkdir -p ../build
           cp Nico3DSStream.3dsx ../build/
 
+      # ビルド成果物をアップロード
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
