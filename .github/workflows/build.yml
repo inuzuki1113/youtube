@@ -1,6 +1,5 @@
 name: Build Nico3DSStream
 
-# Pushや手動実行でビルド
 on:
   push:
     branches:
@@ -16,20 +15,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 必要なパッケージをインストール
-      - name: Install Dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y git wget unzip build-essential devkitpro-devkitarm
+      # devkitPro 環境をセットアップ（公式 Action 使用）
+      - name: Setup devkitPro
+        uses: devkitPro/setup-devkitpro@v2
+        with:
+          tools: devkitARM
 
-      # devkitPro 環境変数を設定
-      - name: Set devkitPro Environment
-        run: |
-          echo "export DEVKITPRO=/opt/devkitPro" >> $GITHUB_ENV
-          echo "export DEVKITARM=/opt/devkitPro/devkitARM" >> $GITHUB_ENV
-          echo "export PATH=$PATH:/opt/devkitPro/devkitARM/bin" >> $GITHUB_ENV
-
-      # 必要なライブラリをクローン（ctru, sf2d, citro3d）
+      # 必要なライブラリをクローン
       - name: Clone Libraries
         run: |
           git clone https://github.com/devkitPro/ctru.git /tmp/ctru
