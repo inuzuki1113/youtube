@@ -11,24 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # devkitPro 環境をセットアップ（公式 Action 使用）
-      - name: Setup devkitPro
-        uses: devkitPro/setup-devkitpro@v2
-        with:
-          tools: devkitARM
+      - name: Install devkitPro
+        run: |
+          wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb
+          sudo dpkg -i devkitpro-pacman.deb
+          dkp-pacman -S switch-dev
+          echo "export DEVKITPRO=/opt/devkitPro" >> $GITHUB_ENV
+          echo "export DEVKITARM=${DEVKITPRO}/devkitARM" >> $GITHUB_ENV
+          echo "export DEVKITPPC=${DEVKITPRO}/devkitPPC" >> $GITHUB_ENV
+          echo "export PATH=$PATH:${DEVKITPRO}/tools/bin" >> $GITHUB_ENV
 
-      # 必要なライブラリをクローン
       - name: Clone Libraries
         run: |
           git clone https://github.com/devkitPro/ctru.git /tmp/ctru
           git clone https://github.com/devkitPro/sf2dlib.git /tmp/sf2dlib
           git clone https://github.com/devkitPro/citro3d.git /tmp/citro3d
 
-      # ビルド
       - name: Build .3dsx
         run: |
           cd source
@@ -36,7 +37,6 @@ jobs:
           mkdir -p ../build
           cp Nico3DSStream.3dsx ../build/
 
-      # ビルド成果物をアップロード
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
