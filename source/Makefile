@@ -4,7 +4,7 @@ BUILD   := build
 SOURCES := $(wildcard source/*.c)
 INCLUDES:= -Isource
 CFLAGS  := -O2 -Wall -march=armv6k -mfloat-abi=hard
-LDFLAGS := -lctru -lsf2d -lcitro3d -lhttpc
+LDFLAGS := -LC:/devkitPro/libctru/lib -lctru -lsf2d -lcitro3d -lhttpc
 
 all:
 	mkdir -p $(BUILD)
